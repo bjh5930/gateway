@@ -1,0 +1,66 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+      routes:
+        - id: packingorder
+          uri: http://localhost:8081
+          predicates:
+            - Path=/packingOrders/** /orderLists/**
+        - id: productpacking
+          uri: http://localhost:8082
+          predicates:
+            - Path=/productPakings/** 
+        - id: orderinfo
+          uri: http://localhost:8083
+          predicates:
+            - Path= /orderLists/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: packingorder
+          uri: http://packingorder:8080
+          predicates:
+            - Path=/packingOrders/** /orderLists/**
+        - id: productpacking
+          uri: http://productpacking:8080
+          predicates:
+            - Path=/productPakings/** 
+        - id: orderinfo
+          uri: http://orderinfo:8080
+          predicates:
+            - Path= /orderLists/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080
